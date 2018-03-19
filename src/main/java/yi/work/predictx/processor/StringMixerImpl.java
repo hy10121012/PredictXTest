@@ -201,6 +201,7 @@ public class StringMixerImpl implements StringMixer {
         }
 
         public boolean equals(Object o) {
+            if(o==null)return false;
             return o instanceof ChartInfo && ((ChartInfo) o).getCharacter().equals(this.getCharacter());
 
 
