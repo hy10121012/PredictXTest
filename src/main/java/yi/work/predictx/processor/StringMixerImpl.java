@@ -30,7 +30,7 @@ public class StringMixerImpl implements StringMixer {
             return "";
         }
         Long startTime = System.currentTimeMillis();
-        List l = generateString(strings);
+        List<ChartInfo> l = generateString(strings);
         String s = String.join("/", l);
 
         Long endTime = System.currentTimeMillis();
