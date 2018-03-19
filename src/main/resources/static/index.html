@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Very Simple PredictX String Mixer</title>
+</head>
+<body>
+
+<script>
+    function submitOri(){
+        document.form1.action="/mixString";
+        document.form1.type.value = "json"
+        document.form1.submit();
+    }
+    function submitExt(){
+        document.form1.action="/advancedMixString";
+        document.form1.type.value = "json"
+        document.form1.submit();
+    }
+    function submitOriStr(){
+        document.form1.action="/mixString";
+        document.form1.type.value = "string"
+        document.form1.submit();
+    }
+    function submitExtStr(){
+        document.form1.action="/advancedMixString";
+        document.form1.type.value = "string"
+        document.form1.submit();
+    }
+
+</script>
+
+
+please input string here:
+<form name="form1" method="post" action="/mixString">
+    <input type="hidden" name="type" value="json">
+    <p><label> string 1: </label><input id="string1" name="strings" value=""></p>
+    <p><label> string 2: </label><input id="string2" name="strings" value=""></p>
+    <p><label> string 3: </label><input id="string3" name="strings" value=""></p>
+    <p><label> string 4: </label><input id="string4" name="strings" value=""></p>
+    <p><label> string 5: </label><input id="string5" name="strings" value=""></p>
+
+    <p><input onclick="submitOri()" type="button" value="submit to orginal requirement processor in Json">
+    <input onclick="submitOriStr()" type="button" value="submit to orginal requirement processor in String">
+    </p>
+    <p>
+    <input onclick="submitExt()" type="button" value="submit to extended requirement processor in Json">
+    <input onclick="submitExtStr()" type="button" value="submit to extended requirement processor  in String">
+    </p>
+</form>
+</body>
+</html>
