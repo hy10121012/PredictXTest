@@ -5,7 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.util.Strings;
 import org.json.JSONArray;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -86,10 +89,32 @@ public class StringMixerImpl implements StringMixer {
 
             });
         });
+
+
+        consolidate.sort((ori, target) -> {
+            if (ori.getOccurency().compareTo(target.getOccurency()) != 0) {
+                return target.getOccurency().compareTo(ori.getOccurency());
+            } else {
+
+                if (ori.getPrefix().compareTo(target.getPrefix()) != 0) {
+                    if (ori.getPrefix().split(",").length > target.getPrefix().split(",").length) {
+                        return 1;
+                    }
+                    if (ori.getPrefix().split(",").length < target.getPrefix().split(",").length) {
+                        return -1;
+                    } else {
+                        return ori.getPrefix().compareTo(target.getPrefix());
+                    }
+                } else {
+                    return ori.getCharacter().compareTo(target.getCharacter());
+                }
+            }
+        });
+
+        List strToReturn = consolidate.stream().collect(Collectors.toList());
+        String s = String.join("/", strToReturn);
         endTime = System.currentTimeMillis();
 
-        List strToReturn = consolidate.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-        String s = String.join("/", strToReturn);
         log.info("generating string: " + s);
         log.debug("concatinating performance: " + (endTime - startTime) + " ms");
         return strToReturn;
@@ -115,7 +140,7 @@ public class StringMixerImpl implements StringMixer {
     }
 
 
-    private final class ChartInfo implements Comparable<ChartInfo>, CharSequence {
+    private class ChartInfo implements CharSequence {
         private final Character character;
         private Integer occurency;
         private String prefix;
@@ -146,28 +171,6 @@ public class StringMixerImpl implements StringMixer {
         void setPreFix(String preFix) {
             this.prefix = preFix;
         }
-
-        @Override
-        public int compareTo(ChartInfo o) {
-            if (o.getOccurency().compareTo(this.getOccurency()) != 0) {
-                return this.getOccurency().compareTo(o.getOccurency());
-            } else {
-
-                if (o.getPrefix().compareTo(this.getPrefix()) != 0) {
-                    if (o.getPrefix().split(",").length > this.getPrefix().split(",").length) {
-                        return 1;
-                    }
-                    if (o.getPrefix().split(",").length < this.getPrefix().split(",").length) {
-                        return -1;
-                    } else {
-                        return o.getPrefix().compareTo(this.getPrefix());
-                    }
-                } else {
-                    return o.getCharacter().compareTo(this.getCharacter());
-                }
-            }
-        }
-
 
         @Override
         public int length() {
@@ -201,7 +204,7 @@ public class StringMixerImpl implements StringMixer {
         }
 
         public boolean equals(Object o) {
-            if(o==null)return false;
+            if (o == null) return false;
             return o instanceof ChartInfo && ((ChartInfo) o).getCharacter().equals(this.getCharacter());
 
 
